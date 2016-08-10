@@ -6,10 +6,10 @@
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
-        <!--View Controller-->
+        <!--Method One-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="PhotoViewers" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="BYZ-38-t0r" customClass="MethodOne" customModule="PhotoViewers" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="y3c-jy-aDJ"/>
                         <viewControllerLayoutGuide type="bottom" id="wfy-db-euE"/>
@@ -38,6 +38,24 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="307" y="379"/>
+        </scene>
+        <!--Method Five-->
+        <scene sceneID="z04-Zg-KqK">
+            <objects>
+                <viewController id="30M-xf-HP8" customClass="MethodFive" customModule="PhotoViewers" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="5i8-pp-y7o"/>
+                        <viewControllerLayoutGuide type="bottom" id="0LD-OH-Sux"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="zJe-p2-U0M">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="SYk-zo-T9s" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="307" y="-1344"/>
         </scene>
         <!--View Controller-->
         <scene sceneID="CY1-Bb-UpY">
@@ -79,6 +97,13 @@
                                     <segue destination="K52-9P-cn4" kind="show" id="Iex-ah-U0u"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KDJ-OC-bAl">
+                                <rect key="frame" x="129" y="76" width="39" height="30"/>
+                                <state key="normal" title="Stack"/>
+                                <connections>
+                                    <segue destination="30M-xf-HP8" kind="show" id="WuW-8l-1f4"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
@@ -88,8 +113,10 @@
                             <constraint firstItem="h4S-pP-QV4" firstAttribute="leading" secondItem="OZH-L8-9t0" secondAttribute="leadingMargin" id="ZjI-xr-d1d"/>
                             <constraint firstItem="9gU-oP-YeG" firstAttribute="leading" secondItem="OZH-L8-9t0" secondAttribute="leadingMargin" id="esw-FY-61Y"/>
                             <constraint firstItem="RSw-ld-3ZZ" firstAttribute="top" secondItem="bm3-E1-6xP" secondAttribute="bottom" constant="8" id="fDh-Y7-RYf"/>
+                            <constraint firstItem="KDJ-OC-bAl" firstAttribute="top" secondItem="RSw-ld-3ZZ" secondAttribute="bottom" constant="18" id="gFs-eU-zw4"/>
                             <constraint firstItem="9gU-oP-YeG" firstAttribute="top" secondItem="bm3-E1-6xP" secondAttribute="bottom" constant="8" id="gb9-gD-alU"/>
                             <constraint firstItem="RSw-ld-3ZZ" firstAttribute="leading" secondItem="h4S-pP-QV4" secondAttribute="trailing" constant="40" id="hpn-ak-p5i"/>
+                            <constraint firstItem="KDJ-OC-bAl" firstAttribute="leading" secondItem="9gU-oP-YeG" secondAttribute="trailing" constant="29" id="t2I-vX-EBB"/>
                             <constraint firstItem="5dR-bk-Lx4" firstAttribute="top" secondItem="bm3-E1-6xP" secondAttribute="bottom" constant="8" id="viV-qY-YIA"/>
                             <constraint firstItem="9gU-oP-YeG" firstAttribute="leading" secondItem="5dR-bk-Lx4" secondAttribute="trailing" constant="50" id="zzx-B9-zb6"/>
                         </constraints>

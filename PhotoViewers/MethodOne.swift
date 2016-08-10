@@ -15,7 +15,7 @@ import Photos
 // if youre about to read this literal waste kilobytes, just know that i gave up trying to make this even remotly nice
 
 
-class ViewController: UIViewController {
+class MethodOne: UIViewController {
 
     @IBOutlet weak var imageView: UIImageView!
     

@@ -46,19 +46,19 @@ class MethodThree: UIViewController {
         self.view.addSubview(imgC)
         self.view.addSubview(imgD)
         
-        var tapA = UITapGestureRecognizer(target: self, action: "tappedA:")
+        let tapA = UITapGestureRecognizer(target: self, action: "tappedA:")
         imgA.userInteractionEnabled = true
         imgA.addGestureRecognizer(tapA)
         
-        var tapB = UITapGestureRecognizer(target: self, action: "tappedB:")
+        let tapB = UITapGestureRecognizer(target: self, action: "tappedB:")
         imgB.userInteractionEnabled = true
         imgB.addGestureRecognizer(tapB)
         
-        var tapC = UITapGestureRecognizer(target: self, action: "tappedC:")
+        let tapC = UITapGestureRecognizer(target: self, action: "tappedC:")
         imgC.userInteractionEnabled = true
         imgC.addGestureRecognizer(tapC)
         
-        var tapD = UITapGestureRecognizer(target: self, action: "tappedD:")
+        let tapD = UITapGestureRecognizer(target: self, action: "tappedD:")
         imgD.userInteractionEnabled = true
         imgD.addGestureRecognizer(tapD)
 
