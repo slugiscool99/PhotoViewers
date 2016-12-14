@@ -28,11 +28,11 @@ class MethodFour: UIViewController, UICollectionViewDelegateFlowLayout, UICollec
         
         let results = PHAsset.fetchAssets(with: PHAssetMediaType.image, options: nil)
         
-        results.enumerateObjects { (object, _, _) in
+        results.enumerateObjects({ (object, _, _) in
             if let asset = object as? PHAsset {
                 self.assets.append(asset)
             }
-        }
+        })
 
         let layout: UICollectionViewFlowLayout = UICollectionViewFlowLayout()
         layout.sectionInset = UIEdgeInsets(top: 2, left: 2, bottom: 2, right: 2)

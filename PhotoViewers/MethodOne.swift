@@ -32,11 +32,11 @@ class MethodOne: UIViewController {
         // Do any additional setup after loading the view, typically from a nib.
         let results = PHAsset.fetchAssets(with: PHAssetMediaType.image, options: nil)
         
-        results.enumerateObjects { (object, _, _) in
+        results.enumerateObjects({ (object, _, _) in
             if let asset = object as? PHAsset {
                 self.assets.append(asset)
             }
-        }
+        })
      
         var pinchGestureRecognizer = UIPinchGestureRecognizer(target: self, action: #selector(MethodOne.pinch(_:)))
         imageView.isUserInteractionEnabled = true

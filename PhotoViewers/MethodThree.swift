@@ -35,11 +35,11 @@ class MethodThree: UIViewController {
         
         let results = PHAsset.fetchAssets(with: PHAssetMediaType.image, options: nil)
         
-        results.enumerateObjects { (object, _, _) in
+        results.enumerateObjects({ (object, _, _) in
             if let asset = object as? PHAsset {
                 self.assets.append(asset)
             }
-        }
+        })
         
         self.view.addSubview(imgA)
         self.view.addSubview(imgB)
