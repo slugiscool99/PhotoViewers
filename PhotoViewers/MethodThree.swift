@@ -16,10 +16,10 @@ class MethodThree: UIViewController {
 
     var assets: [PHAsset] = []
 
-    let imgA = UIImageView(frame: CGRectMake(0, 0, UIScreen.mainScreen().bounds.size.width/2, UIScreen.mainScreen().bounds.size.height/2))
-    let imgB = UIImageView(frame: CGRectMake(UIScreen.mainScreen().bounds.size.width/2, 0, UIScreen.mainScreen().bounds.size.width/2, UIScreen.mainScreen().bounds.size.height/2))
-    let imgC = UIImageView(frame: CGRectMake(0, UIScreen.mainScreen().bounds.size.height/2, UIScreen.mainScreen().bounds.size.width/2, UIScreen.mainScreen().bounds.size.height/2))
-    let imgD = UIImageView(frame: CGRectMake(UIScreen.mainScreen().bounds.size.width/2, UIScreen.mainScreen().bounds.size.height/2, UIScreen.mainScreen().bounds.size.width/2, UIScreen.mainScreen().bounds.size.height/2))
+    let imgA = UIImageView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width/2, height: UIScreen.main.bounds.size.height/2))
+    let imgB = UIImageView(frame: CGRect(x: UIScreen.main.bounds.size.width/2, y: 0, width: UIScreen.main.bounds.size.width/2, height: UIScreen.main.bounds.size.height/2))
+    let imgC = UIImageView(frame: CGRect(x: 0, y: UIScreen.main.bounds.size.height/2, width: UIScreen.main.bounds.size.width/2, height: UIScreen.main.bounds.size.height/2))
+    let imgD = UIImageView(frame: CGRect(x: UIScreen.main.bounds.size.width/2, y: UIScreen.main.bounds.size.height/2, width: UIScreen.main.bounds.size.width/2, height: UIScreen.main.bounds.size.height/2))
    
     var i = 5
 
@@ -27,15 +27,15 @@ class MethodThree: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        imgA.contentMode = UIViewContentMode.ScaleToFill
-        imgB.contentMode = UIViewContentMode.ScaleToFill
-        imgC.contentMode = UIViewContentMode.ScaleToFill
-        imgD.contentMode = UIViewContentMode.ScaleToFill
+        imgA.contentMode = UIViewContentMode.scaleToFill
+        imgB.contentMode = UIViewContentMode.scaleToFill
+        imgC.contentMode = UIViewContentMode.scaleToFill
+        imgD.contentMode = UIViewContentMode.scaleToFill
 
         
-        let results = PHAsset.fetchAssetsWithMediaType(PHAssetMediaType.Image, options: nil)
+        let results = PHAsset.fetchAssets(with: PHAssetMediaType.image, options: nil)
         
-        results.enumerateObjectsUsingBlock { (object, _, _) in
+        results.enumerateObjects { (object, _, _) in
             if let asset = object as? PHAsset {
                 self.assets.append(asset)
             }
@@ -46,26 +46,26 @@ class MethodThree: UIViewController {
         self.view.addSubview(imgC)
         self.view.addSubview(imgD)
         
-        let tapA = UITapGestureRecognizer(target: self, action: "tappedA:")
-        imgA.userInteractionEnabled = true
+        let tapA = UITapGestureRecognizer(target: self, action: #selector(MethodThree.tappedA(_:)))
+        imgA.isUserInteractionEnabled = true
         imgA.addGestureRecognizer(tapA)
         
-        let tapB = UITapGestureRecognizer(target: self, action: "tappedB:")
-        imgB.userInteractionEnabled = true
+        let tapB = UITapGestureRecognizer(target: self, action: #selector(MethodThree.tappedB(_:)))
+        imgB.isUserInteractionEnabled = true
         imgB.addGestureRecognizer(tapB)
         
-        let tapC = UITapGestureRecognizer(target: self, action: "tappedC:")
-        imgC.userInteractionEnabled = true
+        let tapC = UITapGestureRecognizer(target: self, action: #selector(MethodThree.tappedC(_:)))
+        imgC.isUserInteractionEnabled = true
         imgC.addGestureRecognizer(tapC)
         
-        let tapD = UITapGestureRecognizer(target: self, action: "tappedD:")
-        imgD.userInteractionEnabled = true
+        let tapD = UITapGestureRecognizer(target: self, action: #selector(MethodThree.tappedD(_:)))
+        imgD.isUserInteractionEnabled = true
         imgD.addGestureRecognizer(tapD)
 
 
     }
     
-    override func viewDidAppear(animated: Bool) {
+    override func viewDidAppear(_ animated: Bool) {
         print("appeared")
         let adata = getAssetThumbnail(assets[assets.endIndex - 1])
         imgA.image = adata
@@ -78,41 +78,41 @@ class MethodThree: UIViewController {
 
     }
     
-    func getAssetThumbnail(asset: PHAsset) -> UIImage {
-        let manager = PHImageManager.defaultManager()
+    func getAssetThumbnail(_ asset: PHAsset) -> UIImage {
+        let manager = PHImageManager.default()
         let option = PHImageRequestOptions()
         var thumbnail = UIImage()
-        option.synchronous = true
-        option.resizeMode = .None
-        option.networkAccessAllowed = true
-        manager.requestImageForAsset(asset, targetSize: CGSize(width: 500, height: 500), contentMode: .AspectFit, options: option, resultHandler: {(result, info)->Void in
+        option.isSynchronous = true
+        option.resizeMode = .none
+        option.isNetworkAccessAllowed = true
+        manager.requestImage(for: asset, targetSize: CGSize(width: 500, height: 500), contentMode: .aspectFit, options: option, resultHandler: {(result, info)->Void in
             thumbnail = result!
         })
         return thumbnail
     }
     
-    func tappedA(sender: UITapGestureRecognizer){
+    func tappedA(_ sender: UITapGestureRecognizer){
         let newdata = getAssetThumbnail(assets[assets.endIndex - i])
         imgA.image = newdata
         i += 1
     }
-    func tappedB(sender: UITapGestureRecognizer){
+    func tappedB(_ sender: UITapGestureRecognizer){
         let newdata = getAssetThumbnail(assets[assets.endIndex - i])
         imgB.image = newdata
         i += 1
     }
-    func tappedC(sender: UITapGestureRecognizer){
+    func tappedC(_ sender: UITapGestureRecognizer){
         let newdata = getAssetThumbnail(assets[assets.endIndex - i])
         imgC.image = newdata
         i += 1
     }
-    func tappedD(sender: UITapGestureRecognizer){
+    func tappedD(_ sender: UITapGestureRecognizer){
         let newdata = getAssetThumbnail(assets[assets.endIndex - i])
         imgD.image = newdata
         i += 1
     }
     
-    override func prefersStatusBarHidden() -> Bool {
+    override var prefersStatusBarHidden : Bool {
         return true
     }
     

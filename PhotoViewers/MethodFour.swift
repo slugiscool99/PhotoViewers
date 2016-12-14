@@ -26,9 +26,9 @@ class MethodFour: UIViewController, UICollectionViewDelegateFlowLayout, UICollec
         
         super.viewDidLoad()
         
-        let results = PHAsset.fetchAssetsWithMediaType(PHAssetMediaType.Image, options: nil)
+        let results = PHAsset.fetchAssets(with: PHAssetMediaType.image, options: nil)
         
-        results.enumerateObjectsUsingBlock { (object, _, _) in
+        results.enumerateObjects { (object, _, _) in
             if let asset = object as? PHAsset {
                 self.assets.append(asset)
             }
@@ -36,42 +36,42 @@ class MethodFour: UIViewController, UICollectionViewDelegateFlowLayout, UICollec
 
         let layout: UICollectionViewFlowLayout = UICollectionViewFlowLayout()
         layout.sectionInset = UIEdgeInsets(top: 2, left: 2, bottom: 2, right: 2)
-        layout.itemSize = CGSize(width: floor(UIScreen.mainScreen().bounds.size.width/2 - 8), height: floor(UIScreen.mainScreen().bounds.size.height/2 - 8))
-        layout.scrollDirection = .Horizontal
+        layout.itemSize = CGSize(width: floor(UIScreen.main.bounds.size.width/2 - 8), height: floor(UIScreen.main.bounds.size.height/2 - 8))
+        layout.scrollDirection = .horizontal
         
         collectionView = UICollectionView(frame: self.view.frame, collectionViewLayout: layout)
         collectionView.dataSource = self
         collectionView.delegate = self
-        collectionView.registerClass(UICollectionViewCell.self, forCellWithReuseIdentifier: "Cell")
-        collectionView.backgroundColor = UIColor.whiteColor()
+        collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "Cell")
+        collectionView.backgroundColor = UIColor.white
         self.view.addSubview(collectionView)
     }
     
-    func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return 99
     }
     
-    func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
 
-        let cell = collectionView.dequeueReusableCellWithReuseIdentifier("Cell", forIndexPath: indexPath)
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath)
 
         setImage(cell, indexPath: indexPath)
         
         cell.layer.shouldRasterize = true
-        cell.layer.rasterizationScale = UIScreen.mainScreen().scale
+        cell.layer.rasterizationScale = UIScreen.main.scale
         
         return cell
     }
     
-    func setImage(cell: UICollectionViewCell, indexPath: NSIndexPath){
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), {
+    func setImage(_ cell: UICollectionViewCell, indexPath: IndexPath){
+        DispatchQueue.global(priority: DispatchQueue.GlobalQueuePriority.default).async(execute: {
             //load the image async
             let data = self.getAssetThumbnail(self.assets[self.assets.endIndex - (Int(indexPath.row) + 1)])
            
             //when done, assign it to the cell's UIImageView on the main thread
-            dispatch_async(dispatch_get_main_queue(), {
-                let img = UIImageView(frame: CGRectMake(0, 0, UIScreen.mainScreen().bounds.size.width/2 - 8, UIScreen.mainScreen().bounds.size.height/2 - 8))
-                img.contentMode = UIViewContentMode.ScaleToFill
+            DispatchQueue.main.async(execute: {
+                let img = UIImageView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width/2 - 8, height: UIScreen.main.bounds.size.height/2 - 8))
+                img.contentMode = UIViewContentMode.scaleToFill
                 cell.addSubview(img)
                 img.image = data
                 //self.collectionView.reloadData()
@@ -80,27 +80,27 @@ class MethodFour: UIViewController, UICollectionViewDelegateFlowLayout, UICollec
         })
     }
     
-    func collectionView(collectionView: UICollectionView, didEndDisplayingCell cell: UICollectionViewCell, forItemAtIndexPath indexPath: NSIndexPath) {
+    func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         print("ended")
         for view in cell.subviews{
             view.removeFromSuperview()
         }
     }
     
-    func getAssetThumbnail(asset: PHAsset) -> UIImage {
-        let manager = PHImageManager.defaultManager()
+    func getAssetThumbnail(_ asset: PHAsset) -> UIImage {
+        let manager = PHImageManager.default()
         let option = PHImageRequestOptions()
         var thumbnail = UIImage()
-        option.synchronous = true
-        option.resizeMode = .None
-        option.networkAccessAllowed = true
-        manager.requestImageForAsset(asset, targetSize: CGSize(width: 500, height: 500), contentMode: .AspectFit, options: option, resultHandler: {(result, info)->Void in
+        option.isSynchronous = true
+        option.resizeMode = .none
+        option.isNetworkAccessAllowed = true
+        manager.requestImage(for: asset, targetSize: CGSize(width: 500, height: 500), contentMode: .aspectFit, options: option, resultHandler: {(result, info)->Void in
             thumbnail = result!
         })
         return thumbnail
     }
     
-    override func prefersStatusBarHidden() -> Bool {
+    override var prefersStatusBarHidden : Bool {
         return true
     }
     

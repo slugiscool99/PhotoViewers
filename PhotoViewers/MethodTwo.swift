@@ -16,7 +16,7 @@ import Photos
 class MethodTwo: UIViewController, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource, UICollectionViewDelegate {
     
     var assets: [PHAsset] = []
-    var imageViewObject: UIImageView = UIImageView(frame:CGRectMake(0, 0, 100, 100));
+    var imageViewObject: UIImageView = UIImageView(frame:CGRect(x: 0, y: 0, width: 100, height: 100));
     
     var oldx: CGFloat = 0.0
     var oldy: CGFloat = 0.0
@@ -24,8 +24,8 @@ class MethodTwo: UIViewController, UICollectionViewDelegateFlowLayout, UICollect
     var cumxdiff: CGFloat = 0.0
     var cumydiff: CGFloat = 0.0
     var cumdiff: CGFloat = 0.0
-    var width = UIScreen.mainScreen().bounds.width
-    var height = UIScreen.mainScreen().bounds.height
+    var width = UIScreen.main.bounds.width
+    var height = UIScreen.main.bounds.height
     var orico: CGFloat = 0.0
     var offscreen = true
     
@@ -41,8 +41,8 @@ class MethodTwo: UIViewController, UICollectionViewDelegateFlowLayout, UICollect
         super.viewDidLoad()
 
         //get images
-        let results = PHAsset.fetchAssetsWithMediaType(PHAssetMediaType.Image, options: nil)
-        results.enumerateObjectsUsingBlock { (object, _, _) in
+        let results = PHAsset.fetchAssets(with: PHAssetMediaType.image, options: nil)
+        results.enumerateObjects { (object, _, _) in
             if let asset = object as? PHAsset {
                 self.assets.append(asset)
             }
@@ -52,24 +52,24 @@ class MethodTwo: UIViewController, UICollectionViewDelegateFlowLayout, UICollect
         let layout: UICollectionViewFlowLayout = UICollectionViewFlowLayout()
         layout.sectionInset = UIEdgeInsets(top: 2, left: 2, bottom: 2, right: 2)
         
-        layout.itemSize = CGSize(width: floor(UIScreen.mainScreen().bounds.size.width/2 - 8), height: floor(UIScreen.mainScreen().bounds.size.height/2 - 8))
+        layout.itemSize = CGSize(width: floor(UIScreen.main.bounds.size.width/2 - 8), height: floor(UIScreen.main.bounds.size.height/2 - 8))
         
-        layout.scrollDirection = .Horizontal
+        layout.scrollDirection = .horizontal
         
-        collectionViewTop = UICollectionView(frame: CGRectMake(0.0, 0.0, width, (height/2)), collectionViewLayout: layout)
+        collectionViewTop = UICollectionView(frame: CGRect(x: 0.0, y: 0.0, width: width, height: (height/2)), collectionViewLayout: layout)
         collectionViewTop.dataSource = self
         collectionViewTop.delegate = self
-        collectionViewTop.registerClass(UICollectionViewCell.self, forCellWithReuseIdentifier: collectionViewTopIdentifier)
-        collectionViewTop.backgroundColor = UIColor.whiteColor()
-        collectionViewTop.userInteractionEnabled = false
+        collectionViewTop.register(UICollectionViewCell.self, forCellWithReuseIdentifier: collectionViewTopIdentifier)
+        collectionViewTop.backgroundColor = UIColor.white
+        collectionViewTop.isUserInteractionEnabled = false
         self.view.addSubview(collectionViewTop)
         
-        collectionViewBottom = UICollectionView(frame: CGRectMake(0.0, (height/2), width, (height/2)), collectionViewLayout: layout)
+        collectionViewBottom = UICollectionView(frame: CGRect(x: 0.0, y: (height/2), width: width, height: (height/2)), collectionViewLayout: layout)
         collectionViewBottom.dataSource = self
         collectionViewBottom.delegate = self
-        collectionViewBottom.registerClass(UICollectionViewCell.self, forCellWithReuseIdentifier: collectionViewBottomIdentifier)
-        collectionViewBottom.backgroundColor = UIColor.whiteColor()
-        collectionViewBottom.userInteractionEnabled = false
+        collectionViewBottom.register(UICollectionViewCell.self, forCellWithReuseIdentifier: collectionViewBottomIdentifier)
+        collectionViewBottom.backgroundColor = UIColor.white
+        collectionViewBottom.isUserInteractionEnabled = false
         self.view.addSubview(collectionViewBottom)
 
 
@@ -78,10 +78,10 @@ class MethodTwo: UIViewController, UICollectionViewDelegateFlowLayout, UICollect
 
 
     //this function calclates the cumalitive distance moved
-    override func touchesMoved(touches: Set<UITouch>, withEvent event: UIEvent?) {
+    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
        
         let touch = touches.first
-        let position: CGPoint = touch!.locationInView(view)
+        let position: CGPoint = touch!.location(in: view)
         
         if(hasrun == false){
             oldx = position.x
@@ -102,45 +102,45 @@ class MethodTwo: UIViewController, UICollectionViewDelegateFlowLayout, UICollect
         oldy = position.y
     }
     
-    override func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent?) {
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         print("off")
         hasrun = false
     }
     
     //this gets images from library
-    func getAssetThumbnail(asset: PHAsset) -> UIImage {
-        let manager = PHImageManager.defaultManager()
+    func getAssetThumbnail(_ asset: PHAsset) -> UIImage {
+        let manager = PHImageManager.default()
         let option = PHImageRequestOptions()
         var thumbnail = UIImage()
-        option.synchronous = true
-        option.resizeMode = .None
-        option.networkAccessAllowed = true
-        manager.requestImageForAsset(asset, targetSize: CGSize(width: 500, height: 500), contentMode: .AspectFit, options: option, resultHandler: {(result, info)->Void in
+        option.isSynchronous = true
+        option.resizeMode = .none
+        option.isNetworkAccessAllowed = true
+        manager.requestImage(for: asset, targetSize: CGSize(width: 500, height: 500), contentMode: .aspectFit, options: option, resultHandler: {(result, info)->Void in
             thumbnail = result!
         })
         return thumbnail
     }
 
     
-    func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
         if(collectionView == self.collectionViewTop){ //top
-            let cell = collectionView.dequeueReusableCellWithReuseIdentifier(collectionViewTopIdentifier, forIndexPath: indexPath)
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: collectionViewTopIdentifier, for: indexPath)
             
             setImageTop(cell, indexPath: indexPath)
             
             cell.layer.shouldRasterize = true
-            cell.layer.rasterizationScale = UIScreen.mainScreen().scale
+            cell.layer.rasterizationScale = UIScreen.main.scale
             
             return cell
         }
         else{ //bottom
-            let cell = collectionView.dequeueReusableCellWithReuseIdentifier(collectionViewBottomIdentifier, forIndexPath: indexPath)
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: collectionViewBottomIdentifier, for: indexPath)
             
             setImageBottom(cell, indexPath: indexPath)
             
             cell.layer.shouldRasterize = true
-            cell.layer.rasterizationScale = UIScreen.mainScreen().scale
+            cell.layer.rasterizationScale = UIScreen.main.scale
             
             return cell
         }
@@ -149,7 +149,7 @@ class MethodTwo: UIViewController, UICollectionViewDelegateFlowLayout, UICollect
 
     
     
-    func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if collectionView == self.collectionViewTop {
             return 99 //change this to asset count (also MethodFour)
         }
@@ -159,8 +159,8 @@ class MethodTwo: UIViewController, UICollectionViewDelegateFlowLayout, UICollect
     }
     
     
-    func setImageTop(cell: UICollectionViewCell, indexPath: NSIndexPath){
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), {
+    func setImageTop(_ cell: UICollectionViewCell, indexPath: IndexPath){
+        DispatchQueue.global(priority: DispatchQueue.GlobalQueuePriority.default).async(execute: {
             //load the image async
             var cimage = 0
             if(indexPath.row%2 != 0){
@@ -173,17 +173,17 @@ class MethodTwo: UIViewController, UICollectionViewDelegateFlowLayout, UICollect
             let data = self.getAssetThumbnail(self.assets[self.assets.endIndex - (cimage + 1)])
             
             //when done, assign it to the cell's UIImageView on the main thread
-            dispatch_async(dispatch_get_main_queue(), {
-                let img = UIImageView(frame: CGRectMake(0, 0, UIScreen.mainScreen().bounds.size.width/2 - 8, UIScreen.mainScreen().bounds.size.height/2 - 8))
-                img.contentMode = UIViewContentMode.ScaleToFill
+            DispatchQueue.main.async(execute: {
+                let img = UIImageView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width/2 - 8, height: UIScreen.main.bounds.size.height/2 - 8))
+                img.contentMode = UIViewContentMode.scaleToFill
                 cell.addSubview(img)
                 img.image = data
             })
         })
     }
    
-    func setImageBottom(cell: UICollectionViewCell, indexPath: NSIndexPath){
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), {
+    func setImageBottom(_ cell: UICollectionViewCell, indexPath: IndexPath){
+        DispatchQueue.global(priority: DispatchQueue.GlobalQueuePriority.default).async(execute: {
             //load the image async, only odds
             var cimage = 0
             if(indexPath.row%2 != 1){
@@ -195,9 +195,9 @@ class MethodTwo: UIViewController, UICollectionViewDelegateFlowLayout, UICollect
             let data = self.getAssetThumbnail(self.assets[self.assets.endIndex - (cimage + 1)])
             
             //when done, assign it to the cell's UIImageView on the main thread
-            dispatch_async(dispatch_get_main_queue(), {
-                let img = UIImageView(frame: CGRectMake(0, 0, UIScreen.mainScreen().bounds.size.width/2 - 8, UIScreen.mainScreen().bounds.size.height/2 - 8))
-                img.contentMode = UIViewContentMode.ScaleToFill
+            DispatchQueue.main.async(execute: {
+                let img = UIImageView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width/2 - 8, height: UIScreen.main.bounds.size.height/2 - 8))
+                img.contentMode = UIViewContentMode.scaleToFill
                 cell.addSubview(img)
                 img.image = data
             })
@@ -206,7 +206,7 @@ class MethodTwo: UIViewController, UICollectionViewDelegateFlowLayout, UICollect
 
     
     //delete unused cells
-    func collectionView(collectionView: UICollectionView, didEndDisplayingCell cell: UICollectionViewCell, forItemAtIndexPath indexPath: NSIndexPath) {
+    func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         print("ended")
         for view in cell.subviews{
             view.removeFromSuperview()
@@ -214,12 +214,12 @@ class MethodTwo: UIViewController, UICollectionViewDelegateFlowLayout, UICollect
     }
     
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         print("going")
-        let lastSectionIndex = (collectionViewBottom?.numberOfSections())! - 1
-        let lastItemIndex = (collectionViewBottom?.numberOfItemsInSection(lastSectionIndex))! - 1
-        let indexPath = NSIndexPath(forItem: lastItemIndex, inSection: lastSectionIndex)
-        collectionViewBottom!.scrollToItemAtIndexPath(indexPath, atScrollPosition: UICollectionViewScrollPosition.Right, animated: false)
+        let lastSectionIndex = (collectionViewBottom?.numberOfSections)! - 1
+        let lastItemIndex = (collectionViewBottom?.numberOfItems(inSection: lastSectionIndex))! - 1
+        let indexPath = IndexPath(item: lastItemIndex, section: lastSectionIndex)
+        collectionViewBottom!.scrollToItem(at: indexPath, at: UICollectionViewScrollPosition.right, animated: false)
         orico = collectionViewBottom.contentOffset.x
 
 
@@ -236,7 +236,7 @@ class MethodTwo: UIViewController, UICollectionViewDelegateFlowLayout, UICollect
     
     
     //this hides the status bar
-    override func prefersStatusBarHidden() -> Bool {
+    override var prefersStatusBarHidden : Bool {
         return true
     }
     
