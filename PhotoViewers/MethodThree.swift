@@ -41,6 +41,7 @@ class MethodThree: UIViewController {
             }
         })
         
+        
         self.view.addSubview(imgA)
         self.view.addSubview(imgB)
         self.view.addSubview(imgC)
@@ -61,6 +62,8 @@ class MethodThree: UIViewController {
         let tapD = UITapGestureRecognizer(target: self, action: #selector(MethodThree.tappedD(_:)))
         imgD.isUserInteractionEnabled = true
         imgD.addGestureRecognizer(tapD)
+        
+        
 
 
     }

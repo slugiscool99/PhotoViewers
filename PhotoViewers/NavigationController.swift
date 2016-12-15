@@ -16,6 +16,21 @@ class NavigationController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        PHPhotoLibrary.requestAuthorization { status in
+            switch status {
+            case .authorized:
+                print("dope")
+            case .restricted:
+                print("damn")
+            case .denied:
+                print("fuck")
+            default:
+                // place for .notDetermined - in this callback status is already determined so should never get here
+                break
+            }
+        }
+        
     }
 
 }

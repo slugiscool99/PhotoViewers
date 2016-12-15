@@ -33,13 +33,39 @@ class MethodTwo: UIViewController, UICollectionViewDelegateFlowLayout, UICollect
     var collectionViewBottom: UICollectionView!
     let collectionViewTopIdentifier = "CollectionViewTopCell"
     let collectionViewBottomIdentifier = "CollectionViewBottomCell"
-
+    var auth = false
 
     var i = 1
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        
+        
+        PHPhotoLibrary.requestAuthorization { status in
+            switch status {
+            case .authorized:
+                print("dope")
+                self.auth = true
+                self.setUp()
+            case .restricted:
+                print("damn")
+            case .denied:
+                print("fuck")
+            default:
+                // place for .notDetermined - in this callback status is already determined so should never get here
+                break
+            }
+        }
+        
+        
+    
 
+
+    }
+
+    func setUp(){
+        
         //get images
         let results = PHAsset.fetchAssets(with: PHAssetMediaType.image, options: nil)
         results.enumerateObjects({ (object, _, _) in
@@ -48,7 +74,7 @@ class MethodTwo: UIViewController, UICollectionViewDelegateFlowLayout, UICollect
             }
         })
         
-
+        
         let layout: UICollectionViewFlowLayout = UICollectionViewFlowLayout()
         layout.sectionInset = UIEdgeInsets(top: 2, left: 2, bottom: 2, right: 2)
         
@@ -71,10 +97,11 @@ class MethodTwo: UIViewController, UICollectionViewDelegateFlowLayout, UICollect
         collectionViewBottom.backgroundColor = UIColor.white
         collectionViewBottom.isUserInteractionEnabled = false
         self.view.addSubview(collectionViewBottom)
-
-
+        
+        
+        
     }
-
+    
 
 
     //this function calclates the cumalitive distance moved
@@ -216,11 +243,14 @@ class MethodTwo: UIViewController, UICollectionViewDelegateFlowLayout, UICollect
     
     override func viewWillAppear(_ animated: Bool) {
         print("going")
-        let lastSectionIndex = (collectionViewBottom?.numberOfSections)! - 1
-        let lastItemIndex = (collectionViewBottom?.numberOfItems(inSection: lastSectionIndex))! - 1
-        let indexPath = IndexPath(item: lastItemIndex, section: lastSectionIndex)
-        collectionViewBottom!.scrollToItem(at: indexPath, at: UICollectionViewScrollPosition.right, animated: false)
-        orico = collectionViewBottom.contentOffset.x
+        if(auth == true){
+            print("continueing")
+            let lastSectionIndex = (collectionViewBottom?.numberOfSections)! - 1
+            let lastItemIndex = (collectionViewBottom?.numberOfItems(inSection: lastSectionIndex))! - 1
+            let indexPath = IndexPath(item: lastItemIndex, section: lastSectionIndex)
+            collectionViewBottom!.scrollToItem(at: indexPath, at: UICollectionViewScrollPosition.right, animated: false)
+            orico = collectionViewBottom.contentOffset.x
+        }
 
 
     }
